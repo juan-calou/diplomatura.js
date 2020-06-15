@@ -50,18 +50,18 @@ export const datosMateria = (idMateria) => {
 // ALUMNO 2
 // ...
 export const infoAlumnos = () => {
-    let resultText = 'NOTAS DE ALUMNOS\n' + '----------------\n';
+    let rt = 'NOTAS DE ALUMNOS\n----------------\n';
     
     database.alumnos.map((a) => {
-        resultText = resultText + a.nombre.toUpperCase() + '\n';
+        rt = rt + a.nombre.toUpperCase() + '\n';
         database.calificaciones
             .filter((c) => c.alumno === a.id)
             .map((ca) => {
-                resultText = resultText + helpers.getMateriaById(ca.materia).nombre + ': ' + ca.nota + '\n';
+                rt = rt + helpers.getMateriaById(ca.materia).nombre + ': ' + ca.nota + '\n';
             });
     });
 
-    return resultText;
+    return rt;
 }
 //console.log(infoAlumnos());
 
@@ -69,19 +69,12 @@ export const infoAlumnos = () => {
 //     La función recibirá: 'nombre del alumno', 'nombre de la materia', 'nota'
 //     Si el alumno y/o la materia no existen deberán crearlos en sus respectivas tablas
 export const nuevaCalificacion = (nombreAlumno, nombreMateria, nota) => {
-    let idAlumno, idMateria;
-    
-    if(helpers.getAlumnoByNombre(nombreAlumno)?.id) {
-        idAlumno = helpers.getAlumnoByNombre(nombreAlumno).id;
-    } else {
-        idAlumno = insertarAlumno(nombreAlumno, 0, 0);
-    }
+   
+    let idAlumno = helpers.getAlumnoByNombre(nombreAlumno)?.id;
+    if(!idAlumno) idAlumno = insertarAlumno(nombreAlumno, 0, 0);
 
-    if(helpers.getMateriaByNombre(nombreMateria)?.id) {
-        idMateria = helpers.getMateriaByNombre(nombreMateria).id;
-    } else {
-        idMateria = insertarMateria(nombreMateria, [], 0);
-    }
+    let idMateria = helpers.getMateriaByNombre(nombreMateria)?.id;
+    if(!idMateria) idMateria = insertarMateria(nombreMateria, [], 0);
 
     database.calificaciones = [
         ...database.calificaciones, 
@@ -91,7 +84,8 @@ export const nuevaCalificacion = (nombreAlumno, nombreMateria, nota) => {
             nota
         }
     ];
-    return '';
+
+    return 'Agregado Alumno: ' + nombreAlumno + ' - Materia: ' + nombreMateria + ' - Nota: ' + nota;
 }
 // console.log(nuevaCalificacion('Juan', 'Materianueva', 10));
 // console.log(nuevaCalificacion('Suzana Mendez', 'Materianueva', 10));

@@ -24,7 +24,7 @@ const lastID = (table) => {
         if (e.id > max) max = e.id;
     });
     return max;
-}
+};
 
 // 5) Crear un objeto 'helpers' que contenga las funciones como métodos
 export const helpers = {
