@@ -12,16 +12,6 @@ export const insertarProvincia = (nombreProvincia) => {
     database.provincias = [...database.provincias, { id: newID, nombre: nombreProvincia }];
     return newID;
 }
-export const insertarAlumno = (nombre, edad, provincia) => {
-    const newID = helpers.lastID(database.alumnos) + 1;
-    database.alumnos = [...database.alumnos, { id: newID, nombre, edad, provincia }];
-    return newID;
-}
-export const insertarMateria = (nombre, profesores, universidad) => {
-    const newID = helpers.lastID(database.materias) + 1;
-    database.materias = [...database.materias, { id: newID, nombre, profesores, universidad }];
-    return newID;
-}
 // console.log(insertarProvincia('nueva'));
 // console.log(database.provincias);
 
@@ -86,6 +76,16 @@ export const nuevaCalificacion = (nombreAlumno, nombreMateria, nota) => {
     ];
 
     return 'Agregado Alumno: ' + nombreAlumno + ' - Materia: ' + nombreMateria + ' - Nota: ' + nota;
+}
+export const insertarAlumno = (nombre) => {
+    const newID = helpers.lastID(database.alumnos) + 1;
+    database.alumnos = [...database.alumnos, { id: newID, nombre }];
+    return newID;
+}
+export const insertarMateria = (nombre) => {
+    const newID = helpers.lastID(database.materias) + 1;
+    database.materias = [...database.materias, { id: newID, nombre }];
+    return newID;
 }
 // console.log(nuevaCalificacion('Juan', 'Materianueva', 10));
 // console.log(nuevaCalificacion('Suzana Mendez', 'Materianueva', 10));
