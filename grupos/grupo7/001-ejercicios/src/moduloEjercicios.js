@@ -1,17 +1,5 @@
 import basededatos from './basededatos';
 
-const getById = (tabla) => (id) => basededatos[tabla].find((i) => i.id === id);
-const getMateriasById = getById('materias');
-const getAlumnosById = getById('alumnos');
-const getProfesoresById = getById('profesores');
-const getByName = (tabla) => (nombre) => basededatos[tabla].find((i) => i.nombre === nombre);
-const getUniversidadesByName = getByName('universidades');
-const getAlumnosByName = getByName('alumnos');
-const promedioArray = (array) => {
-  if (array.length < 1) { return 0; } /// En caso de que el array este vacio
-  return array.reduce((a, b) => a + b) / array.length;
-}
-
 /**
  * Obtiene la lista de materias aprobadas (nota >= 4) para el nombre de alumno dado.
  * En caso de no existir el alumno, devolver undefined.
@@ -34,13 +22,18 @@ const promedioArray = (array) => {
  * @param {nombreAlumno} nombreAlumno
  */
 export const materiasAprobadasByNombreAlumno = (nombreAlumno) => {
-  
-  let alumnoId = getAlumnosByName(nombreAlumno)?.id;
-  
-  return basededatos.calificaciones
-    .filter(cal => cal.alumno === alumnoId && cal.nota >= 4)
-    .map(i => getMateriasById(i.materia));
+  // Ejemplo de como accedo a datos dentro de la base de datos
 
+  let idAlumno = basededatos.alumnos.find(alumno => alumno.nombre === nombreAlumno).id;
+  let materiasDescripcion = []
+
+  for (let j = 0; j<basededatos.calificaciones.length; j++)
+  {
+    if (basededatos.calificaciones[j].alumno === idAlumno && basededatos.calificaciones[j].nota >=4)
+        materiasDescripcion[materiasDescripcion.length] = basededatos.materias.find(materia => materia.id === basededatos.calificaciones[j].materia);
+  }
+  
+  return [materiasDescripcion];
 };
 
 /**
@@ -82,109 +75,114 @@ export const materiasAprobadasByNombreAlumno = (nombreAlumno) => {
          { id: 2, nombre: 'Alina Robles', edad: 21, provincia: 2 },
       ]
     }
- * param {string} nombreUniversidad
+ * @param {string} nombreUniversidad
  */
 export const expandirInfoUniversidadByNombre = (nombreUniversidad) => {
-
-  let universidad = getUniversidadesByName(nombreUniversidad);
-  let arrayMaterias = [];
-  let arrayProfesores = [];
-  let arrayAlumnos = [];
-
-  basededatos.materias
-    .filter((m) => {
-      if(m.universidad === universidad.id) {
-        arrayMaterias = [...arrayMaterias, m];
-      }
-    });
-
-  basededatos.materias
-    .filter((m) => {
-      if(m.universidad === universidad.id) {
-        for (const prof of m.profesores) {
-          if (!arrayProfesores.find((i) => i.id === prof)) {
-            arrayProfesores = [...arrayProfesores, getProfesoresById(prof)];
-          }
-        }
-      }
-    });
-
-  basededatos.materias
-    .filter((m) => {
-      if(m.universidad === universidad.id) {
-        for (const calif of basededatos.calificaciones) {
-          if (calif.materia === m.id) {
-            if (!arrayAlumnos.find((i) => i.id === calif.alumno)) {
-              arrayAlumnos = [...arrayAlumnos, getAlumnosById(calif.alumno)];
-            }
-          }
-        }
-      }
-    });
-
-  universidad.materias   = arrayMaterias;
-  universidad.profesores = arrayProfesores;
-  universidad.alumnos    = arrayAlumnos;
-    
-  return universidad;
+  // identifico la universidad
+  let uni = basededatos.universidades.find((universidad)=>universidad.nombre===nombreUniversidad);
   
+  // obtengo las materias asociadas
+  uni.materias = materiasByUni(uni.id); // Creo una propiedad para alojar las materias de la uni
+
+  // obtengo los profesores asociados a las materias de la uni
+  uni.profesores = profesoresByMaterias(uni.materias); // Creo una propiedad para alojar los profesores de la uni
+
+  // obtengo los alumnos asociados
+  uni.alumnos = alumnosByMaterias(uni.materias); // Creo una propiedad para alojar los alumnos de la uni
+
+
+  return {uni};
 };
+
+const materiasByUni = (universidadId) =>
+{
+  let materias = [];
+  for (let i=0; i<basededatos.materias.length; i++)
+  {
+    if (basededatos.materias[i].universidad === universidadId)
+      materias.push(basededatos.materias[i]);
+  }
+  return materias;
+}
+
+
+const profesoresByMaterias = (materias) =>
+{
+  let profesores = [];
+  let profeTemp;
+
+  // recorro las materias de la uni
+  for (let i=0; i<materias.length; i++)
+  {
+    // recorro los profes de la materia
+    for (let j=0; j<materias[i].profesores.length; j++)
+    {
+      // por cada profe verifico si no existe ya en el array que retornaré así evito los duplicados
+      profeTemp = basededatos.profesores.find((profesor)=>profesor.id === materias[i].profesores[j]);
+      if (profesores.indexOf(profeTemp) === -1)
+      {
+          profesores.push(profeTemp);
+      }
+    }
+  }
+  return profesores;
+}
+
+
+const alumnosByMaterias = (materias) =>
+{
+  let alumnos = [];
+  let calificacionesTemp = [];
+  let alumnoTemp;
+
+  // recorro las materias de la uni
+  for (let i=0; i<materias.length; i++)
+  {
+    calificacionesTemp = basededatos.calificaciones.filter((calificacion)=>calificacion.materia === materias[i].id)
+    // console.log("Calificaciones de la materia " + materias[i].nombre + ": ");
+    // console.log(calificacionesTemp)
+    // recorro las calificaciones de la materia para sacar los alumnos
+    for (let j=0; j<calificacionesTemp.length; j++)
+    {
+      // por cada calificacion verifico si el alumno no existe ya en el array que retornaré así evito los duplicados
+      alumnoTemp = basededatos.alumnos.find((alumno)=>alumno.id === calificacionesTemp[j].alumno);
+      if (alumnos.indexOf(alumnoTemp) === -1)
+      {
+          alumnos.push(alumnoTemp);
+          // console.log("Alumno: "+ alumnoTemp.nombre + " se agrega dentro de la lista: " + alumnos);
+      } 
+    }
+  }
+  return alumnos;
+}
 
 // /**
 //  * Devuelve el promedio de edad de los alumnos.
 //  */
-export const promedioDeEdad = () => {
-  return promedioArray(basededatos.alumnos.map(al => al.edad)).toFixed(2);
-};
+// export const promedioDeEdad = () => {
+//   return [];
+// };
 
 // /**
 //  * Devuelve la lista de alumnos con promedio mayor al numero pasado
 //  * por parametro.
 //  * @param {number} promedio
 //  */
-export const alumnosConPromedioMayorA = (promedio) => {
-  return basededatos.alumnos.filter(a => promedioAlumno(a.id) > promedio);
-};
-
-// /**
-//  * Devuelve el promedio de edad de un alumno.
-//  */
-const promedioAlumno = (id) => {
-  let calif = basededatos.calificaciones
-    .filter(c => c.alumno === id)
-    .map(r => r.nota);
-
-  return promedioArray(calif).toFixed(2);
-}
+// export const alumnosConPromedioMayorA = (promedio) => {
+//   return [];
+// };
 
 // /**
 //  * Devuelve la lista de materias sin alumnos
 //  */
-export const materiasSinAlumnosAnotados = () => {
-  return basededatos.materias.filter(m => basededatos.calificaciones.find(c => c.materia === m.id)?.materia);
-};
+// export const materiasSinAlumnosAnotados = () => {
+//   return [];
+// };
 
 // /**
 //  * Devuelve el promdedio de edad segun el id de la universidad.
 //  * @param {number} universidadId
 //  */
-export const promedioDeEdadByUniversidadId = (universidadId) => {
-  let arrayAlumnos = [];
-  
-  basededatos.materias.filter(materia => {
-    if(materia.universidad === universidadId) {
-      basededatos.calificaciones.filter(calif => {
-        if(calif.materia ===  materia.id) {
-          let califId = calif.alumno;
-          basededatos.alumnos.filter(alumno => {
-            if(alumno.id === califId) {
-              /// chequear si el alumno ya existe en el array
-              if (arrayAlumnos.filter(a => a.id === alumno.id).length <= 0) arrayAlumnos = [...arrayAlumnos, alumno];
-            }
-          });
-        }
-      });
-    }
-  });
-  return promedioArray(arrayAlumnos.map(al => al.edad)).toFixed(2);
-};
+// export const promedioDeEdadByUniversidadId = (universidadId) => {
+//   return [];
+// };
