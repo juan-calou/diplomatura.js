@@ -61,10 +61,10 @@ export const infoAlumnos = () => {
 export const nuevaCalificacion = (nombreAlumno, nombreMateria, nota) => {
    
     let idAlumno = helpers.getAlumnoByNombre(nombreAlumno)?.id;
-    if(!idAlumno) idAlumno = insertarAlumno(nombreAlumno, 0, 0);
+    if(!idAlumno) idAlumno = insertarAlumno(nombreAlumno);
 
     let idMateria = helpers.getMateriaByNombre(nombreMateria)?.id;
-    if(!idMateria) idMateria = insertarMateria(nombreMateria, [], 0);
+    if(!idMateria) idMateria = insertarMateria(nombreMateria);
 
     database.calificaciones = [
         ...database.calificaciones, 
