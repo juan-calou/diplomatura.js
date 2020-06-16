@@ -46,12 +46,13 @@ export const helpers = {
     addUniversidad : (nombre) => addItem(nombre,"universidades"),
     addProvincia : (nombre) => addItem(nombre,"provincias"),
     addAlumno : (nombre) => addItem(nombre,"alumnos"),
+    
     addCalificiacion : (alumno,materia,nota) => {
-        let objMat = getTablaByName(materia,"materias");
-        let objAlu = getTablaByName(alumno,"alumnos");
+        const objMat = getTablaByName(alumno,"materias");
+        const objAlu = getTablaByName(alumno,"alumnos");
 
-        let idMat = objMat===undefined? addItem(materia,"materias"): objMat.id;
-        let idAlu = objAlu===undefined? addItem(alumno,"alumnos"): objAlu.id;
+        let idMat = !objMat? addItem(materia,"materias"): objMat.id;
+        let idAlu = !objAlu? addItem(alumno,"alumnos"): objAlu.id;
 
         database.calificaciones.push({alumno: idAlu, materia: idMat, nota: nota});
         return database.calificaciones[database.calificaciones.length-1];   
@@ -59,11 +60,9 @@ export const helpers = {
 
     getMateriaExtendById : (id) => {
 
-        let obMat = getTablaById(id, "materias");
-        //console.log(obMat);
-        let obUni = getTablaById(obMat.universidad,"universidades");
-        //console.log(obUni);
-        let listProfes = obMat.profesores.map(value => getTablaById(value,"profesores")).map(value => value.nombre);
+        const obMat = getTablaById(id, "materias");
+        const obUni = getTablaById(obMat.universidad,"universidades");
+        const listProfes = obMat.profesores.map(value => getTablaById(value,"profesores")).map(value => value.nombre);
 
         return {id:obMat.id, nombre:obMat.nombre, universidad:obUni.nombre, profesores:listProfes};
     },
