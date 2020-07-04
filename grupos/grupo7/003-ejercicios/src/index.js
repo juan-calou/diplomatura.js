@@ -3,7 +3,7 @@ import Vector from './2.vector';
 import {delay} from './3.delayCallbacks';
 import {api} from './4.api';
 import {api_async} from './5.async_await';
-import {delayPromise} from './6.delayPromise';
+import {run, runAsync} from './6.delayPromise';
 
 console.log("1.collection");
 const col = new Collection([1,2,3]);
@@ -43,8 +43,11 @@ api_async();
 console.log('');
 */
 
-delayPromise('hola',2)
-.then(response => console.log('fin'));
+
+console.log("6.DelayPromise");
+runAsync();
+console.log('');
+
 
 
 
