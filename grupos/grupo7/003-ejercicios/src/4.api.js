@@ -6,7 +6,7 @@ import fetch from 'node-fetch';
 export function printDataUser(id){
     fetch('https://jsonplaceholder.typicode.com/users/' + id)
         .then(value => value.json())
-        .then(o => "Name: " + o.name + " - City: " + o.address?.city)
+        .then(o => "Imprimo usuario " + id + "\nName: " + o.name + " - City: " + o.address?.city)
         .then(obj => console.log(obj))
         .catch(e => console.log("Error: " + e)); 
 }
@@ -20,7 +20,7 @@ export function printDataUsers(){
             ))) */
         //.then(o => o.forEach(element => "Name: " + element.name + " - City: " + element.address?.city))
         .then(o => o.map(element => "Name: " + element.name + " - City: " + element.address?.city))
-        .then(obj => console.log(obj))
+        .then(obj => console.log("Imprimo usuarios: \n" + obj))
         .catch(e => console.log("Error: " + e)); 
 }
 

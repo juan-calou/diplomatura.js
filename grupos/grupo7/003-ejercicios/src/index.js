@@ -2,6 +2,7 @@ import Collection from './1.collection';
 import Vector from './2.vector';
 import {delay1, delay2, run1, run2} from './3.delay';
 import {printDataUser,printDataUsers} from './4.api';
+import {getRemoteData, getRemoteDatas} from './5.api';
 
 const coleccion = new Collection([1,2,3]);
 const coleccion1 = new Collection();
@@ -35,5 +36,10 @@ run2(); */
 
  
 console.log("##################### PUNTO 4 #####################")
-printDataUser(1);
-printDataUsers();
+/* printDataUser(1);
+printDataUsers() */; 
+
+ 
+console.log("##################### PUNTO 5 #####################")
+/* getRemoteData(1);
+getRemoteDatas(); */
