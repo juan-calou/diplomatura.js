@@ -3,6 +3,7 @@ import Vector from './2.vector';
 import {delay1, delay2, run1, run2} from './3.delay';
 import {printDataUser,printDataUsers} from './4.api';
 import {getRemoteData, getRemoteDatas} from './5.api';
+import {runConPromise,runConAsync} from './6.delay';
 
 const coleccion = new Collection([1,2,3]);
 const coleccion1 = new Collection();
@@ -15,9 +16,9 @@ coleccion.add(4);
 console.log("Lista con nuevo elemento (4):",coleccion);
 coleccion1.add(4);
 console.log("Lista con nuevo elemento (4) a la vacía:",coleccion1);
- coleccion.delete(2);
- console.log("Lista sin elemento borrado (2):",coleccion);
- console.log("Validar si tiene el 3:",coleccion.has(3));
+coleccion.delete(2);
+console.log("Lista sin elemento borrado (2):",coleccion);
+console.log("Validar si tiene el 3:",coleccion.has(3));
 
  
 console.log("##################### PUNTO 2 #####################")
@@ -43,3 +44,9 @@ printDataUsers() */;
 console.log("##################### PUNTO 5 #####################")
 /* getRemoteData(1);
 getRemoteDatas(); */
+
+ 
+console.log("##################### PUNTO 6 #####################")
+//runConPromise();
+runConAsync()
+
