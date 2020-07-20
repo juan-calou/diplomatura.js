@@ -2,7 +2,7 @@ import express from 'express';
 import { helpers } from '../helpers.js';
 
 const router = express.Router();
-const coleccion = 'alumnos';
+const coleccion = 'calificaciones';
 
 router.get('/', async function (req, res) {
   let alumnos = '';
@@ -21,10 +21,9 @@ router.get('/:id', async function (req, res) {
 
 const parseData = (body) => {
   const item = {
-    id: body.id,
-    nombre: body.nombre,
-    edad: body.edad,
-    provincia: body.provincia,
+    alumno: body.alumno,
+    materia: body.materia,
+    nota: body.nota,
   };
   return item;
 };

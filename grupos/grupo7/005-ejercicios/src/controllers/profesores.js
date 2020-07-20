@@ -2,7 +2,7 @@ import express from 'express';
 import { helpers } from '../helpers.js';
 
 const router = express.Router();
-const coleccion = 'alumnos';
+const coleccion = 'profesores';
 
 router.get('/', async function (req, res) {
   let alumnos = '';
@@ -23,8 +23,6 @@ const parseData = (body) => {
   const item = {
     id: body.id,
     nombre: body.nombre,
-    edad: body.edad,
-    provincia: body.provincia,
   };
   return item;
 };
