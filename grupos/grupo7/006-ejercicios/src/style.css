@@ -1,3 +1,13 @@
 body {
   font-family: sans-serif;
 }
+
+table,th,td {
+  border: 2px;
+  border-style: groove;
+  padding: 2px;
+}
+
+div {
+  margin: 5px;
+}
