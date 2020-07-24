@@ -2,9 +2,9 @@
   "name": "vanilla",
   "version": "1.0.0",
   "description": "JavaScript example starter project",
-  "main": "index.html",
+  "main": "globos.html",
   "scripts": {
-    "start": "parcel *.html --open"
+    "start": "parcel globos.html --open"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
