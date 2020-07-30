@@ -35,7 +35,7 @@ const database = {
   alumnos: [
     { id: 1, nombre: 'Rigoberto Manchu', edad: 22 },
     { id: 2, nombre: 'Alina Robles', edad: 21 },
-    { id: 3, nombre: 'Suzana Mendez', edad: 33 },
+    { id: 3, nombre: 'Susana Mendez', edad: 33 },
     { id: 4, nombre: 'Adrian Soto', edad: 26 },
     { id: 5, nombre: 'Martin Sarnaga', edad: 23 },
     { id: 6, nombre: 'Pablo Tomafi', edad: 30 },
