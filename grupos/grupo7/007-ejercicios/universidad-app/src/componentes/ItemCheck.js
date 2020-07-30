@@ -2,10 +2,10 @@ import React from 'react';
 
 export default function ItemCheck(props) {
     return (
-        <li>
+        <div>
             <input key={props.id}  type="checkbox" 
-            checked={props.isChecked} value={props.value} 
+             value={props.value} checked={props.isChecked}
             onChange={props.checkItemCheched}/> {props.value}
-        </li>  //onClick={props.checkItemCheched}
+        </div>  //onClick={props.checkItemCheched} 
     )
 }

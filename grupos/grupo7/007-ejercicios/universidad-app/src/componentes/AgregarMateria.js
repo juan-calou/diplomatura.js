@@ -8,7 +8,7 @@ export default class AgregarMateria extends React.Component {
         console.log(checkProfesores);
         this.state = {
             nombre:"Nombre Materia" , 
-            profesores:checkProfesores,
+            profesores:checkProfesores
         };
     }
 
@@ -25,7 +25,7 @@ export default class AgregarMateria extends React.Component {
         console.log(e.target);
         let profesores = this.state.profesores
         profesores.forEach(prof => {
-        if (prof.id === e.target.key)
+        if (prof.value === e.target.value)
             prof.isChecked =  e.target.checked
         })
         this.setState({profesores: profesores})
@@ -33,8 +33,12 @@ export default class AgregarMateria extends React.Component {
 
     agregar() {
         console.log(this.state.profesores);
-        let profeSel=this.state.profesores.filter(p => p.isChecked); //   .map(p => p.id);
+        let profeSel=this.state.profesores.filter(p => p.isChecked).map(p => p.id);
+        let profesores = this.state.profesores;
+        profesores.forEach(prof => {prof.isChecked = false;});
+        this.setState({profesores: profesores , nombre:"Nombre Materia"});
         this.props.agregar({nombre:this.state.nombre,profesores:profeSel});
+        
     }
 
     render() {
@@ -53,10 +57,9 @@ export default class AgregarMateria extends React.Component {
               <ul>
                 {this.state.profesores.map(e => {
                     return (
-                    <ItemCheck  checkItemCheched={this.checkItemCheched.bind(this)}
-                        key={e.id} value={e.value} isChecked={e.isChecked} 
+                    <ItemCheck  key={e.id} checkItemCheched={this.checkItemCheched.bind(this)}
+                        id={e.id} value={e.value} isChecked={e.isChecked} 
                     />
-                    // <CheckBox handleCheckChieldElement={this.handleCheckChieldElement}  {...fruite} />
                     );
                 })}
                 </ul>

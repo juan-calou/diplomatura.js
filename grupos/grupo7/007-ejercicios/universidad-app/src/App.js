@@ -106,7 +106,7 @@ class App extends React.Component {
           agregar={this.agregar.bind(this)}/>;
     }
     if (tipo==="Calificacion") {
-      listaCalificaciones= this.state.calificaciones.filter(a => a.alumno!==item.alumno && a.materia!==item.materia);
+      listaCalificaciones= this.state.calificaciones.filter(c => c.alumno!==item.alumno || c.materia!==item.materia || c.nota!==item.nota);
       this.setState({ calificaciones: listaCalificaciones  });
       vista=<ListaCalificaciones lista={listaCalificaciones} alumnos={this.state.alumnos}
           materias={this.state.materias}
@@ -148,7 +148,7 @@ class App extends React.Component {
     }
     if (tipo==="Materia") {
       id=(Math.max.apply(null, this.state.materias.map(m => m.id))+1);
-      listaMaterias= this.state.materias.concat({id:id ,nombre:item.nombre}); //falta revisar
+      listaMaterias= this.state.materias.concat({id:id ,nombre:item.nombre,profesores:item.profesores}); 
       this.setState({ materias: listaMaterias  });
       vista=<ListaMaterias lista={listaMaterias} 
           profesores={this.state.profesores}
@@ -164,6 +164,7 @@ class App extends React.Component {
           agregar={this.agregar.bind(this)}/>;
     }
     this.setVistaActual(vista,-1);
+    alert("Agregar "+tipo +" Completado con Exito");
   }
 }
 
