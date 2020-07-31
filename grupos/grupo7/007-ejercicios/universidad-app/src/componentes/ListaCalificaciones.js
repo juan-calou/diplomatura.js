@@ -25,7 +25,7 @@ export default class ListaAlumnos extends React.Component {
     render(){
         return (
             <div style={{textAlign: 'center'}}>
-                <AgregarCalificacion agregar={this.agregar.bind(this)} />
+                <AgregarCalificacion agregar={this.agregar.bind(this)} alumnos={this.props.alumnos} materias={this.props.materias}/>
                 <br />
                 <br />
                 <h1>Calificaciones</h1>

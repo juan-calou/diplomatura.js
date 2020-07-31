@@ -155,11 +155,12 @@ class App extends React.Component {
           borrar={this.borrar.bind(this)} detalle={this.detalle.bind(this)}
           agregar={this.agregar.bind(this)}/>;
     }
-    if (tipo==="Calificacion") {  //hacer completo
-      listaCalificaciones= this.state.calificaciones.filter(a => a.id!==item.id);
-      this.setState({ materias: listaMaterias  });
-      vista=<ListaMaterias lista={listaCalificaciones} 
-          profesores={this.state.profesores}
+    if (tipo==="Calificacion") {  
+      listaCalificaciones= this.state.calificaciones.concat(item);
+      this.setState({ calificaciones: listaCalificaciones  });
+      vista=<ListaCalificaciones lista={listaCalificaciones} 
+          alumnos={this.state.alumnos}
+          materias={this.state.materias}
           borrar={this.borrar.bind(this)} detalle={this.detalle.bind(this)}
           agregar={this.agregar.bind(this)}/>;
     }
