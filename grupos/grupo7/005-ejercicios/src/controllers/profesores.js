@@ -1,25 +1,74 @@
 import express from 'express';
+import {
+  getData,
+  getDataById,
+  insertData,
+  updateData,
+  deleteData,
+} from '../db.js';
 
+const nomCollection = 'profesores';
 const router = express.Router();
 
-router.get('/', function (req, res) {
-  // Completar
-  res.json({});
+router.get('/', async function (req, res) {
+  let rta;
+  try {
+    rta = await getData(nomCollection, req.query.nombre);
+  } catch (e) {
+    console.log(e);
+  }
+  res.json(rta);
 });
 
-router.get('/:id', function (req, res) {
-  // Completar
-  res.json({});
+router.get('/:id', async function (req, res) {
+  let rta;
+  try {
+    rta = await getDataById(nomCollection, req.query.id);
+  } catch (e) {
+    console.log(e);
+  }
+  res.json(rta);
 });
 
-router.post('/', function (req, res) {
-  // TIP: En req.body viene los datos
-
-  // Completar
-  res.json({});
+router.post('/', async function (req, res) {
+  let rta;
+  try {
+    rta = await insertData(nomCollection, {
+      id: req.body.id,
+      nombre: req.body.nombre,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+  if (rta.insertedCount) res.json(rta.ops);
+  else res.json(rta);
 });
 
-// Completar el resto de los métodos
-// router....
+router.put('/:id', async function (req, res) {
+  let rta;
+  try {
+    rta = await updateData(nomCollection, {
+      id: req.params.id,
+      element: {
+        id: req.body.id,
+        nombre: req.body.nombre,
+      },
+    });
+  } catch (e) {
+    console.log(e);
+  }
+  if (rta.ok) res.json(rta.value);
+  else res.json(rta);
+});
+
+router.delete('/:id', async function (req, res) {
+  let rta;
+  try {
+    rta = await deleteData(nomCollection, req.params.id);
+  } catch (e) {
+    console.log(e);
+  }
+  res.json({ ok: rta.deletedCount === 1 });
+});
 
 export default router;

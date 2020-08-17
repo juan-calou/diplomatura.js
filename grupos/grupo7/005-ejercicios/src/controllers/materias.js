@@ -7,7 +7,7 @@ import {
   deleteData,
 } from '../db.js';
 
-const nomCollection = 'alumnos';
+const nomCollection = 'materias';
 const router = express.Router();
 
 router.get('/', async function (req, res) {
@@ -36,8 +36,8 @@ router.post('/', async function (req, res) {
     rta = await insertData(nomCollection, {
       id: req.body.id,
       nombre: req.body.nombre,
-      edad: req.body.edad,
-      provincia: req.body.provincia,
+      profesores: req.body.profesores,
+      universidad: req.body.universidad,
     });
   } catch (e) {
     console.log(e);
@@ -54,8 +54,8 @@ router.put('/:id', async function (req, res) {
       element: {
         id: req.body.id,
         nombre: req.body.nombre,
-        edad: req.body.edad,
-        provincia: req.body.provincia,
+        profesores: req.body.profesores,
+        universidad: req.body.universidad,
       },
     });
   } catch (e) {

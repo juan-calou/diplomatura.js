@@ -7,7 +7,7 @@ import {
   deleteData,
 } from '../db.js';
 
-const nomCollection = 'alumnos';
+const nomCollection = 'calificaciones';
 const router = express.Router();
 
 router.get('/', async function (req, res) {
@@ -34,10 +34,9 @@ router.post('/', async function (req, res) {
   let rta;
   try {
     rta = await insertData(nomCollection, {
-      id: req.body.id,
-      nombre: req.body.nombre,
-      edad: req.body.edad,
-      provincia: req.body.provincia,
+      alumno: req.body.alumno,
+      materia: req.body.materia,
+      nota: req.body.nota,
     });
   } catch (e) {
     console.log(e);
@@ -52,10 +51,9 @@ router.put('/:id', async function (req, res) {
     rta = await updateData(nomCollection, {
       id: req.params.id,
       element: {
-        id: req.body.id,
-        nombre: req.body.nombre,
-        edad: req.body.edad,
-        provincia: req.body.provincia,
+        alumno: req.body.alumno,
+        materia: req.body.materia,
+        nota: req.body.nota,
       },
     });
   } catch (e) {
