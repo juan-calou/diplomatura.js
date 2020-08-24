@@ -12,9 +12,9 @@ export default class AgregarCalificacion extends React.Component {
         this.state = {
             alumno: 0 , 
             materia: 0,
-            nota:0,
-            alumnos: alumnos,
-            materias : materias
+            nota: 0,
+            alumnos,
+            materias, 
 
         };
     }

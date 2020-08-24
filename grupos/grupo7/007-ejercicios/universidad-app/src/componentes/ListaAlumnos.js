@@ -11,16 +11,9 @@ export default class ListaAlumnos extends React.Component {
 
     }
 
-    borrar(alumno) {
-        // 
-        this.props.borrar("Alumno",alumno);
-    }
-    agregar(alumno) {
-        this.props.agregar("Alumno",alumno);
-    }
-    detalle(alumno) {
-        this.props.detalle("Alumno",alumno);
-    }
+    borrar=(alumno) => {this.props.borrar(alumno);}
+    agregar=(alumno) => {this.props.agregar(alumno);}
+    detalle=(alumno) => {this.props.detalle(alumno);}
 
     render(){
         return (
@@ -33,11 +26,7 @@ export default class ListaAlumnos extends React.Component {
                 <ul>
                 {this.props.lista.map(e => {
                     return (
-                    <ItemAlumno key={e.id}
-                        Borrar={this.borrar.bind(this)}
-                        Detalle={this.detalle.bind(this)}
-                        item={e}
-                    />
+                    <ItemAlumno key={e.id} borrar={this.borrar} detalle={this.detalle} item={e} />
                     );
                 })}
                 </ul>

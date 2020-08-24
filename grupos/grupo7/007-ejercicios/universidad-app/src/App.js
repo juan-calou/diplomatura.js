@@ -16,6 +16,7 @@ class App extends React.Component {
     this.state = {
       vistaActual: 'alumnos',
       idDetalleSeleccionado: -1,
+      item:"",
       alumnos: datos.alumnos,
       profesores: datos.profesores,
       materias: datos.materias,
@@ -28,53 +29,44 @@ class App extends React.Component {
    * @param {*} vista
    * @param {*} idSeleccionado
    */
-  setVistaActual(vista, idSeleccionado) {
-    const newState = { vistaActual: vista };
-    if (idSeleccionado) {
-      newState.idDetalleSeleccionado = idSeleccionado;
+  setVistaActual(vista, item) {
+    let newState = { vistaActual: vista };
+    if (item.id) {
+      newState= {idDetalleSeleccionado:item.id, item:item};
+      console.log (`Vista ${vista} Nuevo idSeleccionado :${item.id} `);
     } else {
       newState.idDetalleSeleccionado = -1;
     }
+    console.log(newState);
     this.setState(newState);
   }
   render() {
     let vistaActual = <div>ToDo</div>;
+    if (this.state.vistaActual==="Alumnos")
+    {
+      vistaActual=this.state.idDetalleSeleccionado!==-1?<DetalleAlumno item={this.state.item}/>:<ListaAlumnos lista={this.state.alumnos} borrar={this.borrar} detalle={this.detalle} agregar={this.agregar}/>;
+    }
+    if (this.state.vistaActual==="Profesores")
+    {
+      vistaActual=this.state.idDetalleSeleccionado!==-1?<DetalleProfesor item={this.state.item}/>:<ListaProfesores lista={this.state.profesores} borrar={this.borrar} detalle={this.detalle} agregar={this.agregar}/>;
+    }
+    if (this.state.vistaActual==="Materias")
+    {
+      vistaActual=this.state.idDetalleSeleccionado!==-1?<DetalleMateria item={this.state.item} profesores={this.state.profesores}/>:<ListaMaterias lista={this.state.materias} profesores={this.state.profesores} borrar={this.borrar} detalle={this.detalle} agregar={this.agregar}/>;
+    }
+    if (this.state.vistaActual==="Calificaciones")
+    {
+      vistaActual=this.state.idDetalleSeleccionado!==-1?<DetalleCalificacion item={this.state.item}/>:<ListaCalificaciones lista={this.state.calificaciones} alumnos={this.state.alumnos} materias={this.state.materias} borrar={this.borrar} detalle={this.detalle} agregar={this.agregar}/>;
+    }
+
     return (
       <div className="App">
         <header className="alert alert-info">Diplomatura JS</header>
         <div id="botonera">
-          <button onClick={() => {
-              this.setVistaActual(<ListaAlumnos lista={this.state.alumnos} 
-                borrar={this.borrar.bind(this)}
-                detalle={this.detalle.bind(this)}
-                agregar={this.agregar.bind(this)}/>,-1);
-            }
-          } className="btn btn-outline-info" >Alumnos  </button> 
-          {/*  */}
-          <button onClick={() => {
-              this.setVistaActual(<ListaProfesores lista={this.state.profesores} 
-                borrar={this.borrar.bind(this)}
-                detalle={this.detalle.bind(this)}
-                agregar={this.agregar.bind(this)}/>,-1);
-            }
-            }  className="btn btn-outline-info">Profesores</button>
-          <button onClick={() => {
-              this.setVistaActual(<ListaMaterias lista={this.state.materias} 
-                profesores={this.state.profesores}
-                borrar={this.borrar.bind(this)}
-                detalle={this.detalle.bind(this)}
-                agregar={this.agregar.bind(this)}/>,-1);
-            }
-          } className="btn btn-outline-info">Materias</button>
-          <button onClick={() => {
-              this.setVistaActual(<ListaCalificaciones lista={this.state.calificaciones} 
-                alumnos={this.state.alumnos}
-                materias={this.state.materias}
-                borrar={this.borrar.bind(this)}
-                detalle={this.detalle.bind(this)}
-                agregar={this.agregar.bind(this)}/>,-1);
-            }
-          } className="btn btn-outline-info">Calificaciones</button>
+          <button onClick={()=>{this.setVistaActual("Alumnos",-1);}} className="btn btn-outline-info" >Alumnos</button> 
+          <button onClick={()=>{this.setVistaActual("Profesores",-1);}} className="btn btn-outline-info">Profesores</button>
+          <button onClick={()=>{this.setVistaActual("Materias",-1);}} className="btn btn-outline-info">Materias</button>
+          <button onClick={()=>{this.setVistaActual("Calificaciones",-1);}} className="btn btn-outline-info">Calificaciones</button>
         </div>
         <div className="mainView">{this.state.vistaActual}</div>
         <div className="mainView">{vistaActual}</div>
@@ -82,90 +74,56 @@ class App extends React.Component {
     );
   }
 
-  borrar(tipo,item) {
+  borrar=(item) =>{
     console.log(item);
-    let vista,listaAlumnos,listaProfesores,listaMaterias,listaCalificaciones;
+    let listaAlumnos,listaProfesores,listaMaterias,listaCalificaciones;
 
-    if (tipo==="Alumno") {
+    if (this.state.vistaActual==="Alumnos") {
       listaAlumnos= this.state.alumnos.filter(a => a.id!==item.id);
       this.setState({ alumnos: listaAlumnos  });
-      vista=<ListaAlumnos lista={listaAlumnos} borrar={this.borrar.bind(this)} detalle={this.detalle.bind(this)}
-          agregar={this.agregar.bind(this)}/>;
     }
-    if (tipo==="Profesor") {
+    if (this.state.vistaActual==="Profesor") {
       listaProfesores= this.state.profesores.filter(a => a.id!==item.id);
       this.setState({ profesores: listaProfesores  });
-      vista=<ListaProfesores lista={listaProfesores} borrar={this.borrar.bind(this)} detalle={this.detalle.bind(this)}
-          agregar={this.agregar.bind(this)}/>;
     }
-    if (tipo==="Materia") {
+    if (this.state.vistaActual==="Materia") {
       listaMaterias= this.state.materias.filter(a => a.id!==item.id);
       this.setState({ materias: listaMaterias  });
-      vista=<ListaMaterias lista={listaMaterias} profesores={this.state.profesores}
-          borrar={this.borrar.bind(this)} detalle={this.detalle.bind(this)}
-          agregar={this.agregar.bind(this)}/>;
     }
-    if (tipo==="Calificacion") {
+    if (this.state.vistaActual==="Calificacion") {
       listaCalificaciones= this.state.calificaciones.filter(c => c.alumno!==item.alumno || c.materia!==item.materia || c.nota!==item.nota);
       this.setState({ calificaciones: listaCalificaciones  });
-      vista=<ListaCalificaciones lista={listaCalificaciones} alumnos={this.state.alumnos}
-          materias={this.state.materias}
-          borrar={this.borrar.bind(this)} detalle={this.detalle.bind(this)}
-          agregar={this.agregar.bind(this)}/>;
     }
-    this.setVistaActual(vista,-1);
   }
 
-  detalle(tipo,item) {
+  detalle=(item) =>{
     console.log(item);
-    let vista;
-    if (tipo==="Alumno") vista= <DetalleAlumno item={item}/>;
-    if (tipo==="Profesor") vista= <DetalleProfesor item={item}/>;
-    if (tipo==="Materia") vista= <DetalleMateria item={item} profesores={this.state.profesores}/>;
-    if (tipo==="Calificacion") vista= <DetalleCalificacion item={item} />;
-    
-    this.setVistaActual(vista,item.id);
+    this.setVistaActual(this.state.vistaActual,item);
   }
 
-  agregar(tipo,item) {
+  agregar=(item)=> {
     console.log(item);
-    let vista,id,listaAlumnos,listaProfesores,listaMaterias,listaCalificaciones;
-    if (tipo==="Alumno") {
+    let id,listaAlumnos,listaProfesores,listaMaterias,listaCalificaciones;
+    if (this.state.vistaActual==="Alumnos") {
       id=(Math.max.apply(null, this.state.alumnos.map(a => a.id))+1);
       listaAlumnos= this.state.alumnos.concat({id:id ,nombre:item.nombre,edad:item.edad});
       this.setState({ alumnos: listaAlumnos  });
-      vista= <ListaAlumnos 
-      lista={listaAlumnos} borrar={this.borrar.bind(this)} detalle={this.detalle.bind(this)}
-      agregar={this.agregar.bind(this)}/>;
+      
     }
-    if (tipo==="Profesor") {
+    if (this.state.vistaActual==="Profesores") {
       id=(Math.max.apply(null, this.state.profesores.map(p => p.id))+1);
       listaProfesores= this.state.profesores.concat({id:id ,nombre:item.nombre});
       this.setState({ profesores: listaProfesores  });
-      vista= <ListaProfesores 
-      lista={listaProfesores} borrar={this.borrar.bind(this)} detalle={this.detalle.bind(this)}
-      agregar={this.agregar.bind(this)}/>;
     }
-    if (tipo==="Materia") {
+    if (this.state.vistaActual==="Materias") {
       id=(Math.max.apply(null, this.state.materias.map(m => m.id))+1);
       listaMaterias= this.state.materias.concat({id:id ,nombre:item.nombre,profesores:item.profesores}); 
       this.setState({ materias: listaMaterias  });
-      vista=<ListaMaterias lista={listaMaterias} 
-          profesores={this.state.profesores}
-          borrar={this.borrar.bind(this)} detalle={this.detalle.bind(this)}
-          agregar={this.agregar.bind(this)}/>;
     }
-    if (tipo==="Calificacion") {  
+    if (this.state.vistaActual==="Calificaciones") {  
       listaCalificaciones= this.state.calificaciones.concat(item);
       this.setState({ calificaciones: listaCalificaciones  });
-      vista=<ListaCalificaciones lista={listaCalificaciones} 
-          alumnos={this.state.alumnos}
-          materias={this.state.materias}
-          borrar={this.borrar.bind(this)} detalle={this.detalle.bind(this)}
-          agregar={this.agregar.bind(this)}/>;
     }
-    this.setVistaActual(vista,-1);
-    alert("Agregar "+tipo +" Completado con Exito");
   }
 }
 
